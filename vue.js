@@ -5,7 +5,18 @@ var webstore = new Vue({
     showProduct: true,
     order: {
       firstName: '',
-      lastName: ''
+      lastName: '',
+      address: '',
+      city: '',
+      state: '',
+      zip: '',
+      method: 'Home Address',
+      home: 'Home Address',
+      business: 'Business Address', 
+      gift: 'Send As A Gift',
+      sendGift: 'Send As A Gift',
+      dontSendGift: 'Do not Send As A Gift',
+      
     },
     product: {      
       id: 1001,
@@ -23,6 +34,9 @@ var webstore = new Vue({
     },
     showCheckout() {
       this.showProduct = this.showProduct ? false : true; 
+    },
+    submitForm() {
+      alert('Submit');
     }
   },
   computed: {

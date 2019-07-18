@@ -27,55 +27,123 @@
     </header>
     
     <main class="container">
-      <div class="row product">
-        <div class="d-flex" v-if="showProduct">
-            <div class="col">
-              <figure>
-                <img v-bind:src="product.image" alt="">
-              </figure>
-            </div>
-    
-            <div class="col col-expand">
-    
-              <h1 v-text="product.title"></h1>
-              <p v-html="product.description"></p>
-              <p class="price">
-                {{ product.price | formatPrice }}
-              </p>
-              <button 
-                class="default btn btn-primary btn-lg" 
-                v-on:click="addToCart"
-                v-if="canAddToCart"
-              >          
-                Add to cart
-              </button>
-              <button 
-                disabled="true" 
-                class=" btn btn-primary btn-lg" 
-                v-else
-              >
-                Add to cart
-              </button>
-    
-            </div>
+      
+      <div class="row" v-if="showProduct">
+          <div class="col">
+            <figure>
+              <img v-bind:src="product.image" alt="">
+            </figure>
+          </div>
+  
+          <div class="col col-expand">
+  
+            <h1 v-text="product.title"></h1>
+            <p v-html="product.description"></p>
+            <p class="price">
+              {{ product.price | formatPrice }}
+            </p>
+            <button 
+              class="default btn btn-primary btn-lg" 
+              v-on:click="addToCart"
+              v-if="canAddToCart"
+            >          
+              Add to cart
+            </button>
+            <button 
+              disabled="true" 
+              class=" btn btn-primary btn-lg" 
+              v-else
+            >
+              Add to cart
+            </button>
+  
+          </div>
+      </div>
+
+      <div class="row" v-else>
+        
+        <div class="col-md-6">
+          <strong>First Name:</strong>
+          <input v-model="order.firstName" class="form-control">
         </div>
-        <div v-else>
-          <div class="col-md-6">
-            <strong>First Name:</strong>
-            <input v-model="order.lastName" class="form-control">
-          </div>
-          <div class="col-md-6">
-            <strong>Last Name:</strong>
-            <input v-model="order.lastName" class="form-control">
-          </div>
-          <div class="col-md-12 verify">
-            <pre>
-              First Name: {{ order.firstName }}
-              Last Name: {{ order.lastName }}
-            </pre>
+
+        <div class="col-md-6">
+          <strong>Last Name:</strong>
+          <input v-model="order.lastName" class="form-control">
+        </div>
+
+        <div class="col-md-12 form-group">
+          <strong>Address:</strong>          
+          <input v-model="order.address" class="form-control">
+        </div>
+
+        <div class="col-md-12 form-group">
+          <strong>City: </strong>
+          <input v-model="order.city" class="form-control">
+        </div>
+
+        <div class="col-md-12 form-group">
+          <Strong>State:</Strong>
+          <select v-model="order.state" class="form-control">
+            <option disabled value="">State</option>
+            <option v-bind:value="state.AL">AL</option>
+            <option v-bind:value="state.AR">AR</option>
+            <option>CA</option>
+            <option>NV</option>
+          </select>
+        </div>
+
+        <div class="col-md-12 form-group">
+          <strong>Zip / Postal Code: </strong>
+          <input v-model="order.zip" class="form-control">
+        </div>
+
+        <div class="col-lg-6 form-group">
+          <input type="checkbox"
+           id="gift"
+           value="true"
+           v-bind:true-value="order.sendGift"
+           v-bind:false-value="order.dontSendGift"
+           v-model="order.gift">
+           <label for="gift">Ship As Gift</label>
+        </div>
+
+        <div class="col-lg-6 form-group">
+          <input type="radio" 
+            id="home"
+            value="Home"
+            v-bind:value="order.home"
+            v-model="order.method">
+            <label for="home">Home</label>
+
+          <input type="radio" 
+            id="business"
+            value="business"
+            v-bind:value="order.business"
+            v-model="order.method">
+            <label for="business">Business</label>
+        </div>
+
+        <div class="col-md-12 verify p-3">
+          <pre>
+            First Name: {{ order.firstName }}
+            Last Name: {{ order.lastName }}
+            Address: {{ order.address }}
+            City: {{ order.city }}
+            Zip: {{ order.zip }}
+            State: {{ order.state }}            
+            Method: {{ order.method }}            
+            Gift: {{ order.gift }}            
+          </pre> 
+          
+          <div class="col-lg-6 form-group">
+            <button type="submit"
+             class="btn btn-primary submit"
+             v-on:click="submitForm">Place order</button>
           </div>
         </div>
-      </div> 
+      </div>
+        
     </main>
   </div>	
   
