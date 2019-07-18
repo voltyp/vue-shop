@@ -16,42 +16,64 @@
         <h1>{{ sitename }}</h1>
       </div>
       <div class="nav navbar-nav mr-5 font-weight-bold">
-        <span>
-          В корзине: {{ cartItemCount }}
-        </span>
+        <button type="button"
+          class="btn btn-default btn-lg"
+          v-on:click="showCheckout">
+            <span>
+                В корзине: {{ cartItemCount }}
+              </span>
+        </button>
       </div>
     </header>
     
-    <main>
+    <main class="container">
       <div class="row product">
-        <div class="col">
-          <figure>
-            <img v-bind:src="product.image" alt="">
-          </figure>
+        <div class="d-flex" v-if="showProduct">
+            <div class="col">
+              <figure>
+                <img v-bind:src="product.image" alt="">
+              </figure>
+            </div>
+    
+            <div class="col col-expand">
+    
+              <h1 v-text="product.title"></h1>
+              <p v-html="product.description"></p>
+              <p class="price">
+                {{ product.price | formatPrice }}
+              </p>
+              <button 
+                class="default btn btn-primary btn-lg" 
+                v-on:click="addToCart"
+                v-if="canAddToCart"
+              >          
+                Add to cart
+              </button>
+              <button 
+                disabled="true" 
+                class=" btn btn-primary btn-lg" 
+                v-else
+              >
+                Add to cart
+              </button>
+    
+            </div>
         </div>
-
-        <div class="col col-expand">
-          
-          <h1 v-text="product.title"></h1>
-          <p v-html="product.description"></p>
-          <p class="price">
-            {{ product.price | formatPrice }}
-          </p>
-          <button 
-            class="default btn btn-primary btn-lg" 
-            v-on:click="addToCart"
-            v-if="canAddToCart"
-          >          
-            Add to cart
-          </button>
-          <button 
-            disabled="true" 
-            class=" btn btn-primary btn-lg" 
-            v-else
-          >
-            Add to cart
-          </button>
-
+        <div v-else>
+          <div class="col-md-6">
+            <strong>First Name:</strong>
+            <input v-model="order.lastName" class="form-control">
+          </div>
+          <div class="col-md-6">
+            <strong>Last Name:</strong>
+            <input v-model="order.lastName" class="form-control">
+          </div>
+          <div class="col-md-12 verify">
+            <pre>
+              First Name: {{ order.firstName }}
+              Last Name: {{ order.lastName }}
+            </pre>
+          </div>
         </div>
       </div> 
     </main>
