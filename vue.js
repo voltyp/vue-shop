@@ -3,6 +3,12 @@ var webstore = new Vue({
   data: {    
     sitename: 'Vue.js Pet Depot', 
     showProduct: true,
+    states: {
+      AL: 'Alabama',
+      AR: 'Arizona',
+      CA: 'California',
+      NV: 'Nevada'
+    },
     order: {
       firstName: '',
       lastName: '',
@@ -18,33 +24,50 @@ var webstore = new Vue({
       dontSendGift: 'Do not Send As A Gift',
       
     },
-    product: {      
-      id: 1001,
-      title: "  Cat Food, 25lb bag",
-      description: "A 25 pound bag of <em>irresistible</em>, organic goodness for your cat.",
-      price: 2000, 
-      image: "images/product-fullsize.png",
-      availableInventory: 5.0
-    },    
+    products: [],    
     cart: []
   },
   methods: {
-    addToCart: function() {
-      this.cart.push(this.product.id);
+    checkRating(n, myProduct) {
+      return myProduct.rating - n >= 0;
+    },
+    addToCart(aProduct) {
+      this.cart.push(aProduct.id);
     },
     showCheckout() {
       this.showProduct = this.showProduct ? false : true; 
     },
     submitForm() {
       alert('Submit');
+    },
+    canAddToCart(aProduct) {
+      return aProduct.availableInventory > this.cartCount(aProduct.id);
+    },
+    cartCount(id) {
+      let count = 0;
+      for (var i = 0; i < this.cart.length; i++) {
+        if (this.cart[i] === id) {
+          count++;
+        }
+      }
+      return count;
     }
   },
   computed: {
     cartItemCount: function() {
       return this.cart.length || '';
     },
-    canAddToCart: function() {
-      return this.product.availableInventory > this.cartItemCount;
+    sortedProducts() {
+      if(this.products.length > 0) {
+        let productsArray = this.products.slice(0);
+        function compare(a, b) {
+          if (a.title.toLowerCase() < b.title.toLowerCase())
+            return -1;
+          if(a.title.toLowerCase() > b.title.toLowerCase())
+            return 0;
+        }
+        return productsArray.sort(compare);
+      }
     }
   },
   filters: {
@@ -62,6 +85,13 @@ var webstore = new Vue({
       } else {
         return "$" + (price / 100).toFixed(2);
       }
-    }
+    }    
+  },
+  created: function() {	
+    axios.get('products.json').then((response) =>{
+        this.products=response.data.products;	
+        console.log(this.products);
+    });
+    
   }
 });	
